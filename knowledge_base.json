@@ -1,0 +1,294 @@
+[
+  {
+    "id": "KB001",
+    "title": "Payment API Returns HTTP 500",
+    "description": "A payment endpoint returns an HTTP 500 Internal Server Error during payment processing.",
+    "symptoms": ["HTTP 500 Internal Server Error", "payment transactions fail", "payment service exception", "server error during checkout"],
+    "diagnostic_checks": [
+      "Review application logs around the failed request and note any exception or correlation ID.",
+      "Check whether the payment service is healthy and review its recent error rate.",
+      "Verify database connectivity if logs indicate database-related failures.",
+      "Check the external payment gateway status and dependency timeouts.",
+      "Review recent deployments and configuration changes; compare failures before and after the change."
+    ],
+    "known_resolutions": [
+      "Correct the underlying code or configuration issue after confirming it from logs.",
+      "Restore database connectivity if a database failure is confirmed.",
+      "Address the external gateway or timeout configuration if evidence points to that dependency."
+    ],
+    "escalation_team": "Backend Engineering",
+    "tags": ["payment", "api", "http 500", "internal server error"]
+  },
+  {
+    "id": "KB002",
+    "title": "Application Cannot Connect to Database",
+    "description": "An application cannot establish a connection to its configured database.",
+    "symptoms": ["connection refused", "database connection timeout", "too many connections", "communications link failure"],
+    "diagnostic_checks": [
+      "Capture the exact database error and timestamp from application logs.",
+      "Confirm the database service is running and reachable from the application host.",
+      "Verify the configured hostname, port, database name, and network route.",
+      "Check credentials and secret configuration without printing passwords into logs.",
+      "Inspect database connection limits and connection-pool usage."
+    ],
+    "known_resolutions": [
+      "Correct an invalid host, port, or database name when confirmed.",
+      "Restore the database service or network access if unavailable.",
+      "Review connection-pool sizing and leaked connections if connection exhaustion is confirmed."
+    ],
+    "escalation_team": "Database Administration / Backend Engineering",
+    "tags": ["database", "db connection", "connection refused", "timeout"]
+  },
+  {
+    "id": "KB003",
+    "title": "Users Unable to Log In",
+    "description": "Users cannot authenticate to an application.",
+    "symptoms": ["login failed", "invalid credentials", "authentication error", "token expired", "HTTP 401"],
+    "diagnostic_checks": [
+      "Record the exact error code and determine whether one user or many users are affected.",
+      "Check identity-provider or authentication-service health.",
+      "Verify token expiry, clock synchronization, and authentication configuration where applicable.",
+      "Review authentication logs while avoiding collection of passwords or active tokens.",
+      "Check recent changes to identity-provider settings or login flows."
+    ],
+    "known_resolutions": [
+      "Correct authentication configuration if a configuration mismatch is confirmed.",
+      "Restore the identity-provider integration if its service is unavailable.",
+      "Guide the user through the approved credential-reset process if the issue is account-specific."
+    ],
+    "escalation_team": "Identity and Access Management / Application Support",
+    "tags": ["login", "authentication", "401", "token"]
+  },
+  {
+    "id": "KB004",
+    "title": "API Returns HTTP 404",
+    "description": "An API request returns Not Found because the requested resource or route cannot be found.",
+    "symptoms": ["HTTP 404", "Not Found", "endpoint unavailable", "route does not exist"],
+    "diagnostic_checks": [
+      "Verify the request URL, HTTP method, path, and required path parameters.",
+      "Check the API documentation and deployed route definitions.",
+      "Confirm the request is being sent to the intended environment or base URL.",
+      "Review gateway or reverse-proxy routing rules if the application route appears correct.",
+      "Check whether the resource identifier exists, if the endpoint expects a specific resource."
+    ],
+    "known_resolutions": [
+      "Correct the URL or HTTP method if it does not match the documented route.",
+      "Correct routing configuration if the gateway is directing requests incorrectly.",
+      "Use a valid resource identifier when the requested resource does not exist."
+    ],
+    "escalation_team": "API / Backend Engineering",
+    "tags": ["404", "not found", "endpoint", "route"]
+  },
+  {
+    "id": "KB005",
+    "title": "API Returns HTTP 401 or 403",
+    "description": "An API request is rejected because authentication is missing or invalid, or access is not permitted.",
+    "symptoms": ["HTTP 401", "HTTP 403", "unauthorized", "forbidden", "access denied"],
+    "diagnostic_checks": [
+      "Check whether the request includes the required authentication mechanism.",
+      "Verify token expiry and issuer or audience configuration where applicable.",
+      "For HTTP 403, check the user's role, permissions, and access policy.",
+      "Review authentication and authorization logs without exposing secrets.",
+      "Compare the failing request with a known-good request using safe test credentials."
+    ],
+    "known_resolutions": [
+      "Refresh or replace an expired credential through the approved process.",
+      "Correct missing permissions when the access policy confirms that access should be allowed.",
+      "Correct authentication configuration if issuer, audience, or related settings are wrong."
+    ],
+    "escalation_team": "Identity and Access Management / API Engineering",
+    "tags": ["401", "403", "unauthorized", "forbidden", "permissions"]
+  },
+  {
+    "id": "KB006",
+    "title": "Application Is Running Slowly",
+    "description": "An application has unusually high response times or slow page and API operations.",
+    "symptoms": ["slow application", "high latency", "requests taking too long", "performance degradation"],
+    "diagnostic_checks": [
+      "Identify which pages or endpoints are slow and record the time window.",
+      "Compare response-time metrics and request volume with a normal baseline.",
+      "Inspect application logs and traces for slow operations or dependency waits.",
+      "Check CPU, memory, thread pools, and database query latency.",
+      "Review recent deployments and configuration changes."
+    ],
+    "known_resolutions": [
+      "Optimize a slow query or operation after profiling identifies it as a bottleneck.",
+      "Address resource saturation if metrics confirm CPU, memory, or thread-pool exhaustion.",
+      "Roll back a problematic change only through the approved deployment procedure and after evidence supports it."
+    ],
+    "escalation_team": "Application Support / Performance Engineering",
+    "tags": ["slow", "latency", "performance", "timeout"]
+  },
+  {
+    "id": "KB007",
+    "title": "Service Unavailable or HTTP 503",
+    "description": "A service returns HTTP 503 or cannot serve requests temporarily.",
+    "symptoms": ["HTTP 503", "service unavailable", "upstream unavailable", "maintenance response"],
+    "diagnostic_checks": [
+      "Check service health checks and recent availability alerts.",
+      "Determine whether the issue affects all users or a subset of requests.",
+      "Inspect deployment status, instance count, and load-balancer health.",
+      "Check resource saturation and dependency availability.",
+      "Review recent deployments or maintenance activity."
+    ],
+    "known_resolutions": [
+      "Restore unhealthy service instances if health checks identify them as unavailable.",
+      "Resolve a confirmed dependency outage or resource-exhaustion condition.",
+      "Follow the approved rollback or recovery procedure if a recent change caused the outage."
+    ],
+    "escalation_team": "Site Reliability Engineering / Infrastructure Operations",
+    "tags": ["503", "service unavailable", "outage", "health check"]
+  },
+  {
+    "id": "KB008",
+    "title": "Connection Timeout to a Remote Service",
+    "description": "A client or application does not receive a response from a remote service before the timeout.",
+    "symptoms": ["connection timed out", "read timeout", "remote host not responding", "request deadline exceeded"],
+    "diagnostic_checks": [
+      "Record the destination host, port, request time, and exact timeout error.",
+      "Check whether the destination service is healthy and reachable from the caller's environment.",
+      "Review DNS resolution, firewall rules, proxy settings, and network routes as applicable.",
+      "Compare connection timeout and read timeout metrics.",
+      "Check dependency latency and request volume before changing timeout settings."
+    ],
+    "known_resolutions": [
+      "Restore network reachability if a network or firewall issue is confirmed.",
+      "Resolve the remote service's availability or performance issue if supported by monitoring.",
+      "Adjust timeout values only when justified by expected latency and service-level requirements."
+    ],
+    "escalation_team": "Network Operations / Service Owner"
+  },
+  {
+    "id": "KB009",
+    "title": "DNS Name Resolution Failure",
+    "description": "A system cannot resolve a hostname to an IP address.",
+    "symptoms": ["unknown host", "DNS resolution failed", "name or service not known", "NXDOMAIN"],
+    "diagnostic_checks": [
+      "Verify the hostname spelling and environment-specific DNS name.",
+      "Test resolution using approved tools such as nslookup or dig.",
+      "Check the configured DNS resolver and whether other names resolve.",
+      "Determine whether the DNS record was recently changed or removed.",
+      "Compare resolution from the affected host with a known-good environment."
+    ],
+    "known_resolutions": [
+      "Correct the hostname if it is misspelled.",
+      "Restore or correct the DNS record if the record is missing or incorrect.",
+      "Escalate resolver or network problems to the team responsible for DNS."
+    ],
+    "escalation_team": "Network Operations / DNS Administration"
+  },
+  {
+    "id": "KB010",
+    "title": "File Upload Is Failing",
+    "description": "Users cannot upload files through an application.",
+    "symptoms": ["upload failed", "file too large", "HTTP 413", "unsupported file type", "upload timeout"],
+    "diagnostic_checks": [
+      "Capture the exact error code and test with a permitted small sample file.",
+      "Check configured file-size and allowed-file-type limits.",
+      "Review reverse-proxy and application request-size limits.",
+      "Check available storage and permissions on the upload destination.",
+      "Inspect application logs for timeout, validation, or storage errors."
+    ],
+    "known_resolutions": [
+      "Use an allowed file type and remain within documented size limits.",
+      "Correct inconsistent request-size limits when authorized and appropriate.",
+      "Restore destination storage access if a permission or storage failure is confirmed."
+    ],
+    "escalation_team": "Application Support / Infrastructure Operations"
+  },
+  {
+    "id": "KB011",
+    "title": "Application Uses Excessive Memory",
+    "description": "Application memory usage grows unusually high or the process is terminated due to memory pressure.",
+    "symptoms": ["out of memory", "OOMKilled", "heap space error", "memory usage increasing"],
+    "diagnostic_checks": [
+      "Check memory metrics and identify whether usage is sustained or a short-lived spike.",
+      "Review application logs for out-of-memory errors and restart events.",
+      "Compare memory use with request volume and recent deployments.",
+      "Use approved profiling or heap-dump procedures if available and safe.",
+      "Check container or host memory limits before changing them."
+    ],
+    "known_resolutions": [
+      "Fix a confirmed memory leak or excessive allocation.",
+      "Adjust memory limits only after validating capacity and application requirements.",
+      "Escalate recurring memory failures to the application engineering team."
+    ],
+    "escalation_team": "Application Engineering / Infrastructure Operations"
+  },
+  {
+    "id": "KB012",
+    "title": "HTTP 429 Too Many Requests",
+    "description": "An API rejects requests because a configured rate limit has been exceeded.",
+    "symptoms": ["HTTP 429", "rate limit exceeded", "too many requests", "throttling"],
+    "diagnostic_checks": [
+      "Check response headers and API documentation for rate-limit information.",
+      "Determine whether request volume increased or a retry loop is occurring.",
+      "Review rate-limit metrics and identify the affected client or endpoint.",
+      "Check whether the response includes a Retry-After value.",
+      "Inspect client retry behavior and ensure retries use backoff where appropriate."
+    ],
+    "known_resolutions": [
+      "Reduce request frequency or batch requests when supported.",
+      "Implement appropriate backoff and honor Retry-After when provided.",
+      "Request a limit change through the service owner if the workload legitimately requires it."
+    ],
+    "escalation_team": "API Platform / Service Owner"
+  },
+  {
+    "id": "KB013",
+    "title": "Application Fails After a Deployment",
+    "description": "Errors or service degradation begin after a software deployment or configuration change.",
+    "symptoms": ["errors after release", "deployment failure", "new exceptions", "regression"],
+    "diagnostic_checks": [
+      "Compare the incident start time with deployment and configuration-change records.",
+      "Review release logs, health checks, and error rates before and after the change.",
+      "Identify affected versions, instances, endpoints, and user groups.",
+      "Check migration compatibility and changed environment variables.",
+      "Follow the team's incident procedure before rollback or further changes."
+    ],
+    "known_resolutions": [
+      "Correct the identified regression or configuration problem.",
+      "Use the approved rollback procedure when evidence links the incident to the release and rollback is safe.",
+      "Verify service health and error rates after remediation."
+    ],
+    "escalation_team": "Release Engineering / Application Engineering"
+  },
+  {
+    "id": "KB014",
+    "title": "Application Returns HTTP 400",
+    "description": "An API rejects a request as malformed or invalid.",
+    "symptoms": ["HTTP 400", "Bad Request", "validation error", "invalid request payload"],
+    "diagnostic_checks": [
+      "Inspect the response body for validation details.",
+      "Compare the request payload with the API schema and required fields.",
+      "Verify data types, content type, encoding, and parameter formats.",
+      "Check whether the client is using the correct API version.",
+      "Reproduce with a minimal safe test request."
+    ],
+    "known_resolutions": [
+      "Correct the request format or required fields based on validation feedback.",
+      "Use the documented API version and content type.",
+      "Escalate if a schema-compliant request is rejected unexpectedly."
+    ],
+    "escalation_team": "API / Application Engineering"
+  },
+  {
+    "id": "KB015",
+    "title": "Background Job Is Not Processing",
+    "description": "A scheduled or queued background task is delayed or not executing.",
+    "symptoms": ["queue backlog", "job stuck", "scheduled task not running", "worker unavailable"],
+    "diagnostic_checks": [
+      "Check queue depth, oldest message age, and job status.",
+      "Verify worker health and scheduler status.",
+      "Inspect job logs for repeated failures or poison messages.",
+      "Check dependency availability and worker resource usage.",
+      "Review recent changes to schedules, queue configuration, or job payloads."
+    ],
+    "known_resolutions": [
+      "Restore worker or scheduler health if it is unavailable.",
+      "Correct the job failure after inspecting its error details.",
+      "Handle repeatedly failing messages according to the team's queue-recovery procedure."
+    ],
+    "escalation_team": "Backend Engineering / Platform Operations"
+  }
+]
